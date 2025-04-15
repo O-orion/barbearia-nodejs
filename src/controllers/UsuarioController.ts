@@ -1,35 +1,24 @@
-import { Logger, Repository } from "typeorm";
-import { Usuario } from "../models/Usuario";
-import { AppDataSource } from "../database/dataSource";
 import { Request, Response } from 'express';
+import UsuarioService from "../services/UsuarioService";
 
 class UsuarioController {
 
-    private usuarioRepository: Repository<Usuario>;
-
+    private readonly usuarioService: UsuarioService;
 
     constructor() {
-        this.usuarioRepository = AppDataSource.getRepository(Usuario);
+       this.usuarioService = new UsuarioService();
     }
 
     // Cadastro de Usuário
     async create(req: Request, res: Response): Promise<void> {
-
-        try {
-            const { email, password, name, bio, dataNasc, genero } = req.body;
-
-            if (!email || !password || !name || !bio || !dataNasc || !genero) {
-                res.status(400).json({ error: 'Todos os campo são obrigatórios' })
-                return;
-            }
-
-            const usuario = new Usuario();
-            usuario.createUsuario(email, password, name,bio, dataNasc);
-
-        } catch (error) {
-
-        }
-
+        const dto = req.body;
+        const usuario = await this.usuarioService.create(dto);
+        res.status(201).json({
+            status: 'success',
+            data: usuario,
+            timesTamp: new Date().toISOString(),
+            message: 'Usuário cadastrado com sucesso!'
+        });
     }
 
 }
