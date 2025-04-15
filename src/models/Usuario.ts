@@ -1,7 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-import * as bcrypt from 'bcrypt';
-
 @Entity('Usuarios')
 export class Usuario {
 
@@ -33,12 +31,13 @@ export class Usuario {
     @Column({ nullable: false })
     genero!: string;
 
-    async createUsuario(email: string, password: string, name: string, bio: string = "", dataNasc: Date ) {
+    async createUsuario(email: string, password: string, name: string, bio: string = "", dataNasc: Date, genero: string ): Promise<void> {
         this.name = name;
         this.email = email;
-        this.password = await bcrypt.hash(password, 10);
         this.bio = bio;
         this.dataNasc = dataNasc;
+        this.password = password;
+        this.genero = genero;
     }
 
 }
