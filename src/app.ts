@@ -1,5 +1,8 @@
+import routes from './routes/index';
 import express from 'express';
 import { AppDataSource } from './database/dataSource';
+import { errorHandler } from './middlewares/ErrorHandle';
+import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 const PORT = 9000;
@@ -7,6 +10,21 @@ const PORT = 9000;
 // Habilitando o JSON
 app.use(express.json());
 
+// Habilitando o CORS
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+}
+);
+
+// Rotas
+app.use('/api', routes);
+
+// Middleware de erro
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, req, res, next);
+});
 
 AppDataSource.initialize()
     .then(

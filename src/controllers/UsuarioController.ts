@@ -23,4 +23,4 @@ class UsuarioController {
 
 }
 
-export default new UsuarioController();
+export default  UsuarioController;

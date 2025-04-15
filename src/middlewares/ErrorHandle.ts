@@ -17,4 +17,6 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     });
 
     console.error(err); // Log erro interno
+
+    next();
 }
