@@ -11,10 +11,14 @@ export class UsuarioValidations {
   private static readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   private static readonly DATE_FORMAT_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
-  public validateDto(dto: CreateUsuarioDto): void {
+  public validateDto(dto: CreateUsuarioDto, update: boolean = false): void {
     const requiredFields: (keyof CreateUsuarioDto)[] = ["email", "password", "name", "dataNasc", "genero"];
     this.validateRequiredFields(dto, requiredFields);
-    this.validatePassword(dto.password);
+
+    if(!update) {
+        this.validatePassword(dto.password);
+    }
+
     this.validateName(dto.name);
     this.validateEmail(dto.email);
     this.validateDateOfBirth(dto.dataNasc);

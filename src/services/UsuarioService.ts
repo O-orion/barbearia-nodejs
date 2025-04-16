@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { QueryFailedError, Repository } from "typeorm";
 import { Usuario } from "../models/Usuario";
 import { AppDataSource } from "../database/dataSource";
 import { CreateUsuarioDto } from "../types/UsuarioDTO";
@@ -49,6 +49,99 @@ class UsuarioService {
 
             throw new InternalServerError("Erro interno ao criar usuário");
         }
+    }
+
+    async getAll(): Promise<Usuario[]> {
+        try {
+            const usuarios = await this.usuarioRepository.find({
+                select: ['id', 'email', 'name', 'bio', 'dataNasc', 'genero', 'createdAt', 'updateAt'],
+            });
+            return usuarios;
+        } catch (error) {
+
+            console.log(error);
+
+            if (error instanceof QueryFailedError) {
+                throw new ValidationError("Erro na consulta ao banco de dados");
+            }
+
+            throw new InternalServerError("Erro interno ao buscar usuários");
+        }
+    }
+
+    async getById(id: string): Promise<Usuario | null> {
+        try {
+
+            const usuario = await this.usuarioRepository.findOne({
+                where: { id },
+                select: ['id', 'email', 'name', 'bio', 'dataNasc', 'genero', 'createdAt', 'updateAt'],
+            });
+            return usuario;
+
+        } catch (error) {
+            console.log(error);
+
+            if (error instanceof QueryFailedError) {
+                throw new ValidationError("Erro na consulta ao banco de dados");
+            }
+
+            throw new InternalServerError("Erro interno ao buscar usuário");
+        }
+    }
+
+    async update(id: string, dto: CreateUsuarioDto): Promise<Usuario | null> {
+        try {
+
+            this.usuarioValidations.validateDto(dto, true);
+
+            const usuario = await this.usuarioRepository.findOne({ where: { id },
+                 select:['id', 'email', 'name', 'bio', 'dataNasc', 'genero', 'createdAt', 'updateAt'] });
+
+            if(!usuario) throw new ValidationError("Usuário não encontrado!");
+
+            this.usuarioRepository.merge(usuario, dto);
+            const updatedUsuario = await this.usuarioRepository.save(usuario);
+            return updatedUsuario;
+
+        } catch (error) {
+            console.log(error);
+
+            if (error instanceof ValidationError) {
+                throw error;
+            }
+
+            if (error instanceof QueryFailedError) {
+                throw new ValidationError("Erro na consulta ao banco de dados");
+            }
+
+            throw new InternalServerError("Erro interno ao atualizar usuário");
+        }
+
+        return null;
+    }
+
+    async delete(id: string): Promise<void> {
+
+        try {
+
+            const usuario = await this.usuarioRepository.findOne({ where: { id }});
+
+            if(!usuario) throw new ValidationError("Usuário não encontrado!");
+
+            await this.usuarioRepository.delete({  id })
+            return;
+
+        } catch (error) {
+            console.log(error);
+
+            if (error instanceof QueryFailedError) {
+                throw new ValidationError("Erro na consulta ao banco de dados");
+            }
+
+            throw new InternalServerError("Erro interno ao deletar usuário");
+
+        }
+
     }
 
 }
