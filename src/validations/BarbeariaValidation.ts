@@ -3,6 +3,7 @@ import { BarberiaDto } from "../types/BarberiaDTO";
 
 export class BarberiaValidation  {
     private static readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    private static readonly TIME_REGEX = /^\d{2}:\d{2}$/;
 
     public validate(dto: BarberiaDto): void {
         const requiredFields: (keyof BarberiaDto)[] = [
@@ -13,10 +14,8 @@ export class BarberiaValidation  {
              "services",
              "closingHours",
              "openingHours",
-             "closingHours",
-             "location",
-             "website",
-             "images"
+             "description",
+
             ];
 
         this.validateRequiredFields(dto, requiredFields);
@@ -59,15 +58,15 @@ export class BarberiaValidation  {
     }
 
     private validatesClosingHours(closingHours: string): void {
-        const closingHoursRegex = /^\d{2}:\d{2}-\d{2}:\d{2}$/; // Exemplo: 08:00-18:00
-        if (!closingHoursRegex.test(closingHours)) {
+
+        if (!BarberiaValidation.TIME_REGEX.test(closingHours)) {
             throw new ValidationError("O horário de fechamento deve estar no formato HH:mm-HH:mm");
         }
     }
 
     private validateOpeningHours(openingHours: string): void {
-        const openingHoursRegex = /^\d{2}:\d{2}-\d{2}:\d{2}$/; // Exemplo: 08:00-18:00
-        if (!openingHoursRegex.test(openingHours)) {
+
+        if (!BarberiaValidation.TIME_REGEX.test(openingHours)) {
             throw new ValidationError("O horário de abertura deve estar no formato HH:mm-HH:mm");
         }
     }
@@ -91,8 +90,10 @@ export class BarberiaValidation  {
     }
 
     private validateImages(images: string[]): void {
-        if (!Array.isArray(images) || images.length === 0) {
-            throw new ValidationError("As imagens devem ser um array e não podem estar vazios");
+        if (images) {
+            if (!Array.isArray(images) || images.length === 0) {
+                throw new ValidationError("As imagens devem ser um array e não podem estar vazios");
+            }
         }
     }
 

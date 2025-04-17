@@ -24,13 +24,13 @@ export class Barberia {
     @Column({  nullable:false })
     description!: string;
 
-    @Column({  nullable:false })
+    @Column('text', { array: true,  nullable:false })
     services!: string[];
 
     @Column({  nullable: true})
     rating?: number;
 
-    @Column({  nullable:true })
+    @Column('text', { array: true,  nullable:true })
     reviews?: string[];
 
     @Column({  nullable:false })
@@ -39,10 +39,10 @@ export class Barberia {
     @Column({  nullable:false })
     closeingHours!: string;
 
-    @Column({  nullable:true })
+    @Column('jsonb', {  nullable:true })
     location!: { lat: number; lng: number } | null;
 
-    @Column({  nullable:true })
+    @Column('text', { array: true,  nullable:true })
     images: string[];
 
     constructor(name: string,
