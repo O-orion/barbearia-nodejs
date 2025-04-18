@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Usuario } from "./Usuario";
+import { Barberia } from "./Barberia";
 
 @Entity("Avaliacoes")
 export default class {
@@ -17,8 +19,17 @@ export default class {
     @Column({ nullable: false })
     barberId: string;
 
-    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-    createdAt: Date;
+    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    createdAt!: Date;
+
+    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    updateAt!: Date;
+
+    @ManyToOne(() => Usuario, (usuario) => usuario.avaliacoes, { onDelete: "CASCADE" })
+    usuario!: Usuario;
+
+    @ManyToOne(() => Barberia, (barberia) => barberia.avaliacoes, { onDelete: "CASCADE" })
+    barberia!: Barberia;
 
     constructor (
         id: string,
@@ -26,13 +37,11 @@ export default class {
         comment: string,
         userId: string,
         barberId: string,
-        createdAt: Date
     ) {
         this.id = id;
         this.rating = rating;
         this.comment = comment;
         this.userId = userId;
         this.barberId = barberId;
-        this.createdAt = createdAt;
     }
 }

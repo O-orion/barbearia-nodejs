@@ -1,4 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import Servicos from "./Servicos";
+import Avaliacoes from "./Avaliacoes";
+import { Usuario } from "./Usuario";
+import { on } from "events";
 
 @Entity('Barberias')
 export class Barberia {
@@ -30,9 +34,6 @@ export class Barberia {
     @Column({  nullable: true})
     rating?: number;
 
-    @Column('text', { array: true,  nullable:true })
-    reviews?: string[];
-
     @Column({  nullable:false })
     openingHours!: string;
 
@@ -45,6 +46,21 @@ export class Barberia {
     @Column('text', { array: true,  nullable:true })
     images: string[];
 
+    @ManyToOne(() => Usuario, (usuario) => usuario.id, { onDelete: "CASCADE" })
+    owner!: Usuario;
+
+    @ManyToMany(() => Servicos, (servicos) => servicos.barberia, { onDelete: "CASCADE" })
+    servicos!: Servicos[];
+
+    @ManyToMany(() => Avaliacoes, (avaliacoes) => avaliacoes.barberia, { onDelete: "CASCADE" })
+    avaliacoes!: Avaliacoes[];
+
+    @CreateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
+    createdAt!: Date;
+
+    @UpdateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
+    updateAt!: Date;
+
     constructor(name: string,
         email: string,
         phone: string,
@@ -53,10 +69,10 @@ export class Barberia {
         description: string,
         services: string[],
         rating: number,
-        reviews: string[],
         openingHours: string,
         closeingHours: string,
         location: { lat: number; lng: number },
+        ownerId: string,
         images: string[]) {
         this.name = name;
         this.email = email;
@@ -66,11 +82,11 @@ export class Barberia {
         this.description = description;
         this.services = services;
         this.rating = rating;
-        this.reviews = reviews;
         this.openingHours = openingHours;
         this.closeingHours = closeingHours;
         this.location = location;
         this.images = images;
+        this.owner = { id: ownerId } as Usuario;
 
     }
 
