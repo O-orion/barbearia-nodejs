@@ -1,4 +1,4 @@
-import { QueryFailedError, Repository } from "typeorm";
+import { DeepPartial, QueryFailedError, Repository } from "typeorm";
 import { AppDataSource } from "../database/dataSource";
 import { Barberia } from "../models/Barberia";
 import { BarberiaDto } from "../types/BarberiaDTO";
@@ -33,13 +33,12 @@ class BarberiaService {
                 dto.address,
                 dto.website ?? "" ,
                 dto.description,
-                dto.services,
                 dto.rating ?? 0,
-                dto.reviews ?? [],
                 dto.openingHours,
                 dto.closingHours,
                 dto.location ?? { lat: 0, lng: 0 },
-                dto.images
+                dto.images,
+                dto.owner
             );
 
             // Salva a barbearia no banco de dados
@@ -110,7 +109,14 @@ class BarberiaService {
 
             if (!barbearia) throw new ValidationError("Barbearia não encontrada!");
 
-            await this.barberiaRepository.merge(barbearia, dto);
+                        // Transform DTO to match DeepPartial<Barberia>
+            const updatedData: DeepPartial<Barberia> = {
+                ...dto,
+                owner: { id: dto.owner }, // Convert owner string to partial Usuario object
+            };
+
+            await this.barberiaRepository.merge(barbearia, updatedData);
+
             const savedBarberia = await this.barberiaRepository.save(barbearia);
 
             return savedBarberia;

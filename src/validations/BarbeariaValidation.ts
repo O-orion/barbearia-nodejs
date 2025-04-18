@@ -11,7 +11,6 @@ export class BarberiaValidation  {
              "phone",
              "address",
              "email",
-             "services",
              "closingHours",
              "openingHours",
              "description",
@@ -25,7 +24,6 @@ export class BarberiaValidation  {
         this.validationDescription(dto.description);
         this.validatesClosingHours(dto.closingHours);
         this.validateOpeningHours(dto.openingHours);
-        this.validateServices(dto.services);
         this.validateName(dto.name);
         this.validateImages(dto.images);
 

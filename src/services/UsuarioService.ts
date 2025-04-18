@@ -55,6 +55,7 @@ class UsuarioService {
         try {
             const usuarios = await this.usuarioRepository.find({
                 select: ['id', 'email', 'name', 'bio', 'dataNasc', 'genero', 'createdAt', 'updateAt'],
+                relations: ['barbearias', 'avaliacoes']
             });
             return usuarios;
         } catch (error) {
@@ -75,6 +76,7 @@ class UsuarioService {
             const usuario = await this.usuarioRepository.findOne({
                 where: { id },
                 select: ['id', 'email', 'name', 'bio', 'dataNasc', 'genero', 'createdAt', 'updateAt'],
+                relations: ['barbearias','avaliacoes',]
             });
             return usuario;
 

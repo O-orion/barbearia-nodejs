@@ -28,9 +28,6 @@ export class Barberia {
     @Column({  nullable:false })
     description!: string;
 
-    @Column('text', { array: true,  nullable:false })
-    services!: string[];
-
     @Column({  nullable: true})
     rating?: number;
 
@@ -44,7 +41,7 @@ export class Barberia {
     location!: { lat: number; lng: number } | null;
 
     @Column('text', { array: true,  nullable:true })
-    images: string[];
+    images!: string[];
 
     @ManyToOne(() => Usuario, (usuario) => usuario.id, { onDelete: "CASCADE" })
     owner!: Usuario;
@@ -67,20 +64,19 @@ export class Barberia {
         adress: string,
         website: string,
         description: string,
-        services: string[],
         rating: number,
         openingHours: string,
         closeingHours: string,
         location: { lat: number; lng: number },
-        ownerId: string,
-        images: string[]) {
+        images: string[],
+        ownerId: string
+    ) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = adress;
         this.website = website;
         this.description = description;
-        this.services = services;
         this.rating = rating;
         this.openingHours = openingHours;
         this.closeingHours = closeingHours;
