@@ -1,8 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Servicos from "./Servicos";
 import Avaliacoes from "./Avaliacoes";
 import { Usuario } from "./Usuario";
-import { on } from "events";
 
 @Entity('Barberias')
 export class Barberia {
@@ -43,10 +42,10 @@ export class Barberia {
     @Column('text', { array: true,  nullable:true })
     images!: string[];
 
-    @ManyToOne(() => Usuario, (usuario) => usuario.id, { onDelete: "CASCADE" })
+    @ManyToOne(() => Usuario, (usuario) => usuario.barberias, { onDelete: "CASCADE" })
     owner!: Usuario;
 
-    @ManyToMany(() => Servicos, (servicos) => servicos.barberia, { onDelete: "CASCADE" })
+    @OneToMany(() => Servicos, (servicos) => servicos.barberia, { onDelete: "CASCADE" })
     servicos!: Servicos[];
 
     @ManyToMany(() => Avaliacoes, (avaliacoes) => avaliacoes.barberia, { onDelete: "CASCADE" })

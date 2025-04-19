@@ -4,14 +4,17 @@ import Servicos from "../models/Servicos";
 import { ServicosDTO } from "../types/ServicosDTO";
 import ServicosValidation from "../validations/ServicosValidation";
 import { InternalServerError, ValidationError } from "../errors/CustomError";
+import { Barberia } from "../models/Barberia";
 
 export default class ServicoService {
 
-private servicoRepository: Repository<Servicos>;
-private servicoValidations: ServicosValidation;
+    private servicoRepository: Repository<Servicos>;
+    private servicoValidations: ServicosValidation;
+    private barberiaRepository: Repository<Barberia>;
 
     constructor() {
         this.servicoRepository = AppDataSource.getRepository(Servicos);
+        this.barberiaRepository = AppDataSource.getRepository(Barberia);
         this.servicoValidations = new ServicosValidation();
     }
 
@@ -20,6 +23,11 @@ private servicoValidations: ServicosValidation;
             this.servicoValidations.validate(dto);
 
             const servicoExists = await this.servicoRepository.findOneBy({ name: dto.name, barberId: dto.barberId });
+            const barbearia = await this.barberiaRepository.findOneBy({ id: dto.barberId });
+
+            if (!barbearia) {
+                throw new ValidationError("Barbearia não encontrada com este ID");
+            }
 
             if (servicoExists) {
                 throw new ValidationError("Serviço já existe para este barbeiro.");
@@ -33,6 +41,7 @@ private servicoValidations: ServicosValidation;
                 dto.image,
                 dto.barberId);
 
+            newServico.barberia = barbearia; // Associa a barbearia ao serviço
             const createdServico = await this.servicoRepository.save(newServico);
             return createdServico;
 

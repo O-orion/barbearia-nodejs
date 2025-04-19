@@ -63,7 +63,9 @@ class BarberiaService {
     async getAll(): Promise<Barberia[]> {
         try {
 
-            const barbearias = await this.barberiaRepository.find()
+            const barbearias = await this.barberiaRepository.find({
+                relations: ['owner', 'servicos'],
+            })
             return barbearias;
 
         } catch (error) {
