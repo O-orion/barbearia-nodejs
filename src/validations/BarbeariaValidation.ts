@@ -26,6 +26,7 @@ export class BarberiaValidation  {
         this.validateOpeningHours(dto.openingHours);
         this.validateName(dto.name);
         this.validateImages(dto.images);
+        this.validateOwner(dto.owner);
 
     }
 
@@ -94,6 +95,13 @@ export class BarberiaValidation  {
             }
         }
     }
+
+    private validateOwner(owner: string): void {
+        if ( !owner || owner.trim() == "" ) {
+            throw new ValidationError("O id do dono é obrigatório");
+        }
+    }
+
 
 }
 
