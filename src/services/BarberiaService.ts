@@ -64,7 +64,7 @@ class BarberiaService {
         try {
 
             const barbearias = await this.barberiaRepository.find({
-                relations: ['owner', 'servicos'],
+                relations: ['owner', 'servicos', 'avaliacoes'],
             })
             return barbearias;
 

@@ -11,8 +11,11 @@ export class Usuario {
     @Column({ unique: true, nullable: false })
     email!:string;
 
-    @Column({ nullable: false})
-    password!: string;
+    @Column({ nullable: true})
+    password?: string;
+
+    @Column({ nullable: true })
+    googleId?: string;
 
     @Column({ nullable: false })
     name!: string;
@@ -41,8 +44,11 @@ export class Usuario {
     @Column({ nullable: false })
     genero!: string;
 
-    async createUsuario(email: string,
-         password: string, name: string,
+    async createUsuario(
+          email: string,
+          password: string,
+          googleId: string,
+          name: string,
           bio: string = "",
           dataNasc: Date,
           genero: string,
@@ -51,7 +57,8 @@ export class Usuario {
         this.email = email;
         this.bio = bio;
         this.dataNasc = dataNasc;
-        this.password = password;
+        this.password = password ? password : undefined;
+        this.googleId = googleId ? googleId : undefined;
         this.genero = genero;
         this.profilePicture = profilePicture;
     }
