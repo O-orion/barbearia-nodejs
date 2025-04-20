@@ -30,7 +30,7 @@ export default class ServicoService {
             }
 
             if (servicoExists) {
-                throw new ValidationError("Serviço já existe para este barbeiro.");
+                throw new ValidationError("Esse serviço já existe para está barbearia.");
             }
 
             const newServico = new Servicos(

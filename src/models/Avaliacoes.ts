@@ -5,7 +5,7 @@ import { Barberia } from "./Barberia";
 @Entity("Avaliacoes")
 export default class {
     @PrimaryGeneratedColumn("uuid")
-    id: string;
+    id!: string;
 
     @Column({ nullable: false })
     rating: number;
@@ -32,13 +32,11 @@ export default class {
     barberia!: Barberia;
 
     constructor (
-        id: string,
         rating: number,
         comment: string,
         userId: string,
         barberId: string,
     ) {
-        this.id = id;
         this.rating = rating;
         this.comment = comment;
         this.userId = userId;

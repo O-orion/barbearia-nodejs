@@ -48,7 +48,7 @@ export class Barberia {
     @OneToMany(() => Servicos, (servicos) => servicos.barberia, { onDelete: "CASCADE" })
     servicos!: Servicos[];
 
-    @ManyToMany(() => Avaliacoes, (avaliacoes) => avaliacoes.barberia, { onDelete: "CASCADE" })
+    @OneToMany(() => Avaliacoes, (avaliacoes) => avaliacoes.barberia, { onDelete: "CASCADE" })
     avaliacoes!: Avaliacoes[];
 
     @CreateDateColumn({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
