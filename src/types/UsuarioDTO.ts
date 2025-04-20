@@ -5,4 +5,5 @@ export interface CreateUsuarioDto {
     bio?: string;
     dataNasc: string;
     genero: string;
+    googleId?: string
   }

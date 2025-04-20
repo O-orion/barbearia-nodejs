@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
 import { ValidationError } from '../errors/CustomError';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRATION = '1h';
 
 export const generateToken = (userId: string): string => {
+    const JWT_SECRET = process.env.JWT_SECRET;
+    const JWT_EXPIRATION = '1h';
 
     if (!JWT_SECRET) {
+
         throw new Error('JWT secret is not defined');
     }
 
@@ -15,6 +16,8 @@ export const generateToken = (userId: string): string => {
 }
 
 export const verifyToken = (token: string): string | jwt.JwtPayload => {
+    const JWT_SECRET = process.env.JWT_SECRET;
+
     if (!JWT_SECRET) {
         throw new ValidationError('JWT secret is not defined');
     }

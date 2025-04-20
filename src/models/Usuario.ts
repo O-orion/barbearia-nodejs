@@ -29,6 +29,9 @@ export class Usuario {
     @Column({ nullable: false })
     dataNasc!: Date;
 
+    @Column({ nullable: false })
+    genero!: string;
+
     @OneToMany(() => Barberia, (barbearia) => barbearia.owner, { onDelete: "CASCADE" })
     barberias!: Barberia[];
 
@@ -41,8 +44,6 @@ export class Usuario {
     @UpdateDateColumn({ type:'timestamp', default: () => "CURRENT_TIMESTAMP" })
     updateAt!: Date;
 
-    @Column({ nullable: false })
-    genero!: string;
 
     async createUsuario(
           email: string,

@@ -30,7 +30,7 @@ class UsuarioService {
               const usuario = new Usuario();
 
             // Cria o usuário com os dados fornecidos
-              usuario.createUsuario(dto.email, passwordHash, dto.name, dto.bio, new Date(dto.dataNasc), dto.genero)
+              usuario.createUsuario(dto.email, passwordHash, dto.googleId ? dto.googleId : "",  dto.name, dto.bio, new Date(dto.dataNasc), dto.genero)
 
               console.log("")
               console.log(dto)

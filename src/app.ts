@@ -4,6 +4,10 @@ import { AppDataSource } from './database/dataSource';
 import { errorHandler } from './middlewares/ErrorHandle';
 import { Request, Response, NextFunction } from 'express';
 
+import { config } from 'dotenv';
+
+config(); // Carrega as variáveis de ambiente do arquivo .env
+
 const app = express();
 const PORT = 9000;
 
