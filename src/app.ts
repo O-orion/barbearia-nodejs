@@ -34,7 +34,8 @@ AppDataSource.initialize()
     .then(
         () => {
             console.log('Conectado ao postgres');
-            // Startando Servidor
+
+            // Start serve;
             app.listen(PORT, () => {
                 console.log(`Servidor on port: ${PORT}`)
             })
